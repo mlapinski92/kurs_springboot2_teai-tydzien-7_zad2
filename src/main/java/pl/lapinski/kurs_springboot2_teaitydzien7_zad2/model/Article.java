@@ -59,6 +59,13 @@ public class Article {
         this.description = description;
     }
 
+    public Article(String author, String title, String description, long articleId) {
+        this.author = author;
+        this.title = title;
+        this.description = description;
+        this.articleId = articleId;
+    }
+
     public long getArticleId() {
         return articleId;
     }

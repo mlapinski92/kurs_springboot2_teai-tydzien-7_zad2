@@ -5,6 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import pl.lapinski.kurs_springboot2_teaitydzien7_zad2.model.Article;
@@ -27,7 +28,8 @@ public class NewsGui extends VerticalLayout {
 
         Button generateNewsDatabase = new Button("Generate News");
         generateNewsDatabase.addClickListener(buttonClickEvent -> {
-            newsDao.generateAndSaveNews();
+            newsDao.generateNews();
+            newsDao.saveNewsToDataBase();
         });
 
         Button refreshDataBase = new Button("Refresh");
@@ -39,9 +41,16 @@ public class NewsGui extends VerticalLayout {
         HorizontalLayout horizontalLayoutForModyfication = new HorizontalLayout();
 
         TextField authorTextField = new TextField("Author");
-        TextField descriptionTextField = new TextField("Description");
         TextField titleTextField = new TextField("Title");
+        TextField descriptionTextField = new TextField("Description");
+        NumberField idNumberField = new NumberField("Enter ID");
+        Button editButton = new Button("Modify");
 
+        editButton.addClickListener(buttonClickEvent -> {
+            newsDao.updateArticle(authorTextField.getValue(), titleTextField.getValue(),
+                    descriptionTextField.getValue(), idNumberField.getValue().longValue());
+        });
+        horizontalLayoutForModyfication.add(authorTextField, titleTextField, descriptionTextField, idNumberField, editButton);
 
         accordion.add("Edit news", horizontalLayoutForModyfication);
 

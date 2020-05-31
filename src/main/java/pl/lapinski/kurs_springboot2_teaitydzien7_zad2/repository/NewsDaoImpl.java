@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-@Service
+
 @Repository
 public class NewsDaoImpl implements NewsDao {
 
@@ -29,13 +29,18 @@ public class NewsDaoImpl implements NewsDao {
     }
 
     @Override
-    public void generateAndSaveNews() {
-        List<Article> articles = newsService.getNewsRest().getArticles();
-        for (Article article : articles) {
+    public void saveNewsToDataBase() {
+        for (Article article : generateNews()) {
             String sql = "INSERT INTO news VALUES (?,?,?)";
             jdbcTemplate.update(sql, article.getAuthor(),
                     article.getTitle(), article.getDescription());
         }
+    }
+
+    @Override
+    public List<Article> generateNews() {
+        List<Article> articles = newsService.getNewsRest().getArticles();
+        return articles;
     }
 
     @Override
@@ -46,23 +51,16 @@ public class NewsDaoImpl implements NewsDao {
         maps.stream().forEach(element -> articles.add(new Article(
                 String.valueOf(element.get("author")),
                 String.valueOf(element.get("title")),
-                String.valueOf(element.get("description"))
+                String.valueOf(element.get("description")),
+                Long.parseLong(String.valueOf(element.get("article_id")))
         )));
         return articles;
     }
 
     @Override
-    public void saveNews() {
-
-    }
-
-    @Override
-    public void findNewsById() {
-
-    }
-
-    @Override
-    public void findNewsByYear() {
-
+    public void updateArticle(String author, String title, String description, long id) {
+        String sql = "UPDATE news SET author=?, title=?, description=? WHERE article_id=?";
+        jdbcTemplate.update(sql, author, title, description, id);
     }
 }
+

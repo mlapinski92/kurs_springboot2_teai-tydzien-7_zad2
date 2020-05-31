@@ -12,9 +12,11 @@ import java.util.List;
 @Repository
 public interface NewsDao {
 
-    void generateAndSaveNews();
+    void saveNewsToDataBase();
+
+    List<Article> generateNews();
+
     List<Article> findAll();
-    void saveNews();
-    void findNewsById();
-    void findNewsByYear();
+
+    void updateArticle(String author, String title, String description, long id);
 }

@@ -13,7 +13,4 @@ public class NewsService {
         News newsObject = restTemplate.getForObject(url, News.class);
         return newsObject;
     }
-
-
-
 }
