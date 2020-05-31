@@ -5,6 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 import pl.lapinski.kurs_springboot2_teaitydzien7_zad2.model.Article;
 import pl.lapinski.kurs_springboot2_teaitydzien7_zad2.model.News;
@@ -21,25 +22,30 @@ public class NewsGui extends VerticalLayout {
         this.newsDao = newsDao;
 
         Grid<Article> newsGrid = new Grid<Article>(Article.class);
+        newsGrid.setColumns("author", "description", "title", "articleId");
+        newsGrid.recalculateColumnWidths();
 
-        Accordion accordion = new Accordion();
-        HorizontalLayout horizontalLayoutForNews = new HorizontalLayout();
-
-        Button generateNewsDatabase = new Button("Generate Database");
+        Button generateNewsDatabase = new Button("Generate News");
         generateNewsDatabase.addClickListener(buttonClickEvent -> {
             newsDao.generateAndSaveNews();
-            newsGrid.setItems((Stream<Article>) newsDao.findAll());
         });
-        horizontalLayoutForNews.add(newsGrid, generateNewsDatabase);
 
-        accordion.add("News Database", horizontalLayoutForNews);
+        Button refreshDataBase = new Button("Refresh");
+        refreshDataBase.addClickListener(buttonClickEvent -> {
+            newsGrid.setItems(newsDao.findAll());
+        });
 
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        Accordion accordion = new Accordion();
+        HorizontalLayout horizontalLayoutForModyfication = new HorizontalLayout();
 
-        accordion.add("News Database", horizontalLayout);
+        TextField authorTextField = new TextField("Author");
+        TextField descriptionTextField = new TextField("Description");
+        TextField titleTextField = new TextField("Title");
 
-        add(newsGrid, accordion);
 
+        accordion.add("Edit news", horizontalLayoutForModyfication);
+
+        add(newsGrid, generateNewsDatabase, refreshDataBase, accordion);
 
     }
 

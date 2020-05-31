@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.lapinski.kurs_springboot2_teaitydzien7_zad2.model.Article;
 import pl.lapinski.kurs_springboot2_teaitydzien7_zad2.model.News;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -16,5 +17,4 @@ public interface NewsDao {
     void saveNews();
     void findNewsById();
     void findNewsByYear();
-
 }

@@ -2,6 +2,8 @@ package pl.lapinski.kurs_springboot2_teaitydzien7_zad2.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -9,6 +11,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.vaadin.flow.component.polymertemplate.Id;
+
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -24,16 +29,8 @@ import com.vaadin.flow.component.polymertemplate.Id;
 })
 public class Article {
 
-    @Id
-    private long articleId;
-
-    public long getArticleId() {
-        return articleId;
-    }
-
-    public void setArticleId(long articleId) {
-        this.articleId = articleId;
-    }
+    static final AtomicLong NEXT_ID = new AtomicLong(1000);
+    long articleId = NEXT_ID.getAndIncrement();
 
     @JsonProperty("source")
     private Source source;
@@ -57,11 +54,20 @@ public class Article {
     public Article() {
     }
 
-    public Article(long articleId, String author, String title, String description) {
-        this.articleId = articleId;
+    public Article(String author, String title, String description, long articleId) {
         this.author = author;
         this.title = title;
         this.description = description;
+        this.articleId = articleId;
+    }
+
+
+    public long getArticleId() {
+        return articleId;
+    }
+
+    public void setArticleId(long articleId) {
+        this.articleId = articleId;
     }
 
     @JsonProperty("source")
@@ -157,10 +163,15 @@ public class Article {
     @Override
     public String toString() {
         return "Article{" +
-                "articleId=" + articleId +
+                ", source=" + source +
                 ", author='" + author + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
+                ", url='" + url + '\'' +
+                ", urlToImage='" + urlToImage + '\'' +
+                ", publishedAt='" + publishedAt + '\'' +
+                ", content='" + content + '\'' +
+                ", additionalProperties=" + additionalProperties +
                 '}';
     }
 }

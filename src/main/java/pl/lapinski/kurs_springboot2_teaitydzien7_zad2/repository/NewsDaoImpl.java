@@ -9,9 +9,11 @@ import pl.lapinski.kurs_springboot2_teaitydzien7_zad2.model.Article;
 import pl.lapinski.kurs_springboot2_teaitydzien7_zad2.model.News;
 import pl.lapinski.kurs_springboot2_teaitydzien7_zad2.service.NewsService;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @Service
 @Repository
@@ -29,10 +31,18 @@ public class NewsDaoImpl implements NewsDao {
     @Override
     public void generateAndSaveNews() {
         List<Article> articles = newsService.getNewsRest().getArticles();
+        String sqlDropDataBase = "DROP TABLE IF EXISTS news";
+        jdbcTemplate.update(sqlDropDataBase);
+        String sqlDatabase = "CREATE TABLE news(author varchar(255), " +
+                "title varchar(255)," +
+                " description varchar(255), " +
+                "article_id serial," +
+                " PRIMARY KEY (article_id)";
+        jdbcTemplate.update(sqlDatabase);
         for (Article article : articles) {
             String sql = "INSERT INTO news VALUES (?,?,?,?)";
-            jdbcTemplate.update(sql, article.getArticleId(),
-                    article.getAuthor(), article.getTitle(), article.getDescription());
+            jdbcTemplate.update(sql, article.getAuthor(),
+                    article.getTitle(), article.getDescription(), article.getArticleId());
         }
     }
 
@@ -42,10 +52,10 @@ public class NewsDaoImpl implements NewsDao {
         List<Article> articles = new ArrayList<>();
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(sql);
         maps.stream().forEach(element -> articles.add(new Article(
-                Long.parseLong(String.valueOf(element.get("news_id"))),
                 String.valueOf(element.get("author")),
                 String.valueOf(element.get("title")),
-                String.valueOf(element.get("description"))
+                String.valueOf(element.get("description")),
+                Long.parseLong(String.valueOf(element.get("article_id")))
         )));
         return articles;
     }
