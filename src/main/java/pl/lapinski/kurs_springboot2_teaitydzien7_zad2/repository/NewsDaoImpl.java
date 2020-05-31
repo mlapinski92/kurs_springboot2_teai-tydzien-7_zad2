@@ -32,9 +32,9 @@ public class NewsDaoImpl implements NewsDao {
     public void generateAndSaveNews() {
         List<Article> articles = newsService.getNewsRest().getArticles();
         for (Article article : articles) {
-            String sql = "INSERT INTO news VALUES (?,?,?,?)";
+            String sql = "INSERT INTO news VALUES (?,?,?)";
             jdbcTemplate.update(sql, article.getAuthor(),
-                    article.getTitle(), article.getDescription(), article.getArticleId());
+                    article.getTitle(), article.getDescription());
         }
     }
 
@@ -46,8 +46,7 @@ public class NewsDaoImpl implements NewsDao {
         maps.stream().forEach(element -> articles.add(new Article(
                 String.valueOf(element.get("author")),
                 String.valueOf(element.get("title")),
-                String.valueOf(element.get("description")),
-                Long.parseLong(String.valueOf(element.get("article_id")))
+                String.valueOf(element.get("description"))
         )));
         return articles;
     }

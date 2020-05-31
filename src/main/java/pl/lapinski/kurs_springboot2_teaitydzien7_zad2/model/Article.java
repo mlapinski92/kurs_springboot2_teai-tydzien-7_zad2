@@ -48,18 +48,16 @@ public class Article {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    private long articleId;
+
     public Article() {
     }
 
-    long articleId;
-
-    public Article(String author, String title, String description, long articleId) {
+    public Article(String author, String title, String description) {
         this.author = author;
         this.title = title;
         this.description = description;
-        this.articleId = articleId;
     }
-
 
     public long getArticleId() {
         return articleId;
