@@ -31,14 +31,6 @@ public class NewsDaoImpl implements NewsDao {
     @Override
     public void generateAndSaveNews() {
         List<Article> articles = newsService.getNewsRest().getArticles();
-        String sqlDropDataBase = "DROP TABLE IF EXISTS news";
-        jdbcTemplate.update(sqlDropDataBase);
-        String sqlDatabase = "CREATE TABLE news(author varchar(255), " +
-                "title varchar(255)," +
-                " description varchar(255), " +
-                "article_id serial," +
-                " PRIMARY KEY (article_id)";
-        jdbcTemplate.update(sqlDatabase);
         for (Article article : articles) {
             String sql = "INSERT INTO news VALUES (?,?,?,?)";
             jdbcTemplate.update(sql, article.getAuthor(),

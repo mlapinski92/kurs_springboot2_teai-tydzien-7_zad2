@@ -29,9 +29,6 @@ import javax.persistence.GenerationType;
 })
 public class Article {
 
-    static final AtomicLong NEXT_ID = new AtomicLong(1000);
-    long articleId = NEXT_ID.getAndIncrement();
-
     @JsonProperty("source")
     private Source source;
     @JsonProperty("author")
@@ -53,6 +50,8 @@ public class Article {
 
     public Article() {
     }
+
+    long articleId;
 
     public Article(String author, String title, String description, long articleId) {
         this.author = author;
